@@ -1,0 +1,79 @@
+# Tests for the staging models.
+#
+# dbt tests are checks that run against your data. Think of them as
+# "promises the data must keep". If a promise breaks, dbt tells you
+# exactly which rows broke it. The four test types used here:
+#
+#   not_null:        this column must never be empty
+#   unique:          no two rows may share the same value
+#   relationships:   every value here must exist in another model's column
+#                    (like a foreign key: every order's customer_id must be
+#                    a real customer)
+#   accepted_values: the column may only contain values from this list
+
+version: 2
+
+models:
+  - name: stg_customers
+    description: Cleaned customer list, one row per customer.
+    columns:
+      - name: customer_id
+        description: Unique id for the customer.
+        tests:
+          - not_null
+          - unique
+      - name: email
+        description: Customer email address.
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_products
+    description: Cleaned product catalog, one row per product.
+    columns:
+      - name: product_id
+        description: Unique id for the product.
+        tests:
+          - not_null
+          - unique
+      - name: category
+        description: Product category.
+        tests:
+          - accepted_values:
+              values: ['Electronics', 'Apparel', 'Home', 'Books', 'Sports']
+      - name: unit_price
+        description: Price of one unit, in dollars.
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: Cleaned order list, one row per order.
+    columns:
+      - name: order_id
+        description: Unique id for the order.
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: Who placed the order. Must be a real customer.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: product_id
+        description: What was ordered. Must be a real product.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_products')
+              field: product_id
+      - name: quantity
+        description: How many units were ordered.
+        tests:
+          - not_null
+      - name: status
+        description: Where the order stands in its lifecycle.
+        tests:
+          - accepted_values:
+              values: ['completed', 'cancelled', 'refunded', 'pending']

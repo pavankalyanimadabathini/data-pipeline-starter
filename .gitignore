@@ -1,0 +1,20 @@
+# DuckDB database files (created locally by load_raw.py / dbt)
+*.duckdb
+*.duckdb.wal
+
+# dbt build artifacts
+ecommerce_analytics/target/
+ecommerce_analytics/dbt_packages/
+ecommerce_analytics/logs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# macOS / editors
+.DS_Store
+.vscode/
+.idea/

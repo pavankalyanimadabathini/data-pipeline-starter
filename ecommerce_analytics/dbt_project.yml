@@ -1,0 +1,25 @@
+# The name of this dbt project. It must match the profile name in profiles.yml.
+name: 'ecommerce_analytics'
+version: '1.0.0'
+config-version: 2
+
+# Which connection profile to use (see profiles.yml).
+profile: 'ecommerce_analytics'
+
+# Where dbt looks for things, relative to this file.
+model-paths: ["models"]
+test-paths: ["tests"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages", "logs"]
+
+# Default settings for models, grouped by folder.
+models:
+  ecommerce_analytics:
+    # Staging models are saved as views: lightweight, always fresh,
+    # cheap to rebuild. They are just "saved queries" over the raw tables.
+    staging:
+      +materialized: view
+    # Mart models are saved as tables: precomputed and fast to query,
+    # which is what dashboards and analysts want.
+    marts:
+      +materialized: table

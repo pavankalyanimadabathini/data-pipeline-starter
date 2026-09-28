@@ -1,0 +1,36 @@
+# Tests for the mart models. Same four test types as staging:
+# not_null, unique, relationships, accepted_values.
+# Marts are what the business sees, so they get strict checks too.
+
+version: 2
+
+models:
+  - name: mart_customer_orders
+    description: >
+      One row per customer with lifetime order stats.
+      Answers: who are our best customers and how much has each spent?
+    columns:
+      - name: customer_id
+        description: Unique id for the customer.
+        tests:
+          - not_null
+          - unique
+      - name: total_spent
+        description: Lifetime revenue from this customer, in dollars.
+        tests:
+          - not_null
+
+  - name: mart_daily_revenue
+    description: >
+      One row per calendar day with revenue stats.
+      Answers: how much money did we make each day?
+    columns:
+      - name: order_date
+        description: The calendar day.
+        tests:
+          - not_null
+          - unique
+      - name: revenue
+        description: Total revenue that day, in dollars.
+        tests:
+          - not_null

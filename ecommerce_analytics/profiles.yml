@@ -1,0 +1,19 @@
+# Connection settings for dbt. This file is for local development only:
+# it points dbt at a DuckDB file on your own machine, so there is no
+# server, no password, and nothing to install besides Python packages.
+#
+# Usage: run dbt with --profiles-dir . from inside ecommerce_analytics/,
+# for example:
+#     dbt build --profiles-dir .
+#
+# Do not commit real credentials in a profiles.yml. This one is safe
+# because a local file path is not a secret.
+
+ecommerce_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # Relative to the project folder (ecommerce_analytics/).
+      # load_raw.py writes to this same file.
+      path: ecommerce.duckdb

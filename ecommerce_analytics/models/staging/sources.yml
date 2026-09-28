@@ -1,0 +1,18 @@
+# Tells dbt where the raw data lives.
+# A "source" is data dbt did not create: it already exists in the database
+# (load_raw.py put it there). Staging models read from sources and clean
+# them up. If a raw table ever goes missing, dbt can warn you here first.
+version: 2
+
+sources:
+  - name: raw
+    description: >
+      Raw tables loaded straight from the CSV files by load_raw.py.
+      Untouched landing zone: no cleaning, no renaming, exactly as generated.
+    tables:
+      - name: customers
+        description: One row per customer, as generated.
+      - name: orders
+        description: One row per order, as generated.
+      - name: products
+        description: One row per product, as generated.
